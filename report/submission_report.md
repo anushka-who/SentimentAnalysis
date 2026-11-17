@@ -18,6 +18,16 @@ Ismail, A., Sazali, F. H., Agos Jawaddi, S. N., & Mutalib, S. (2025). *Stream ET
 
 This implementation narrows the system to local Spark Structured Streaming and MLlib, evaluates three methods on the same fixed holdout, and measures local-core replay performance. It does not reproduce the paper’s multi-component deployment, bias correction, or mapping work. The comparison is architectural and methodological; absolute performance numbers are not comparable.
 
+| Dimension | Ismail et al. (2025) | This project |
+|---|---|---|
+| Pipeline components | Kafka, Spark, Cassandra, HBase, Hive, HDFS | Spark Structured Streaming and MLlib on one Docker-hosted laptop |
+| Data | Three use cases: COVID English Twitter API, Country English public data, COVID Spanish public data; detailed sizes not verified | Sentiment140, 1.6M source rows; cleaned deterministic train/holdout |
+| Sentiment method | Twitter-XLM-RoBERTa-base, three classes | Logistic Regression, Naive Bayes, and VADER; binary labels |
+| Evaluation | Classification and bias detection/correction use cases; performance varies dataset size, trigger interval, and storage technology | Shared holdout accuracy/F1; watermarked daily windows; one run per local core setting |
+| Scale | Multi-component big-data architecture; exact numeric benchmark results unavailable in the accessible paper text | Local[1], local[2], local[4], 64 historical files; simulated replay, not live ingestion |
+
+The publisher record confirms the bibliographic volume (261) and article number (125523). The article's accessible method/results text did not expose verifiable numeric tables or precise dataset-size counts; those values are intentionally left unspecified.
+
 ## Dataset and preparation
 
 Sentiment140 is a headerless, latin-1 CSV with fields target, id, date, flag, user, and text. Targets 0 and 4 were mapped to negative 0 and positive 1. Rows without target, ID, text, valid event time, or non-empty cleaned text were excluded. Duplicate tweet IDs were removed before splitting. PDT/PST wall-clock times were normalized to UTC using offsets of -07:00 and -08:00. The username and ID fields were not persisted; VADER text removes handles and URLs, while model text also removes common escaped HTML entities before lowercasing and stripping to alphabetic tokens.
@@ -66,10 +76,10 @@ The host has a 13th Gen Intel Core i7-1355U (12 logical processors) and 15.69 Gi
 | Spark mode | Records scored | Replay time (s) | Throughput (records/s) | Median trigger (ms) | P95 trigger (ms) | Speedup | Window reconciliation |
 |---|---:|---:|---:|---:|---:|---:|---|
 | local[1] | 318,527 | 253.95 | 1254.30 | 24451 | 30210 | 1.000 | Pass |
-| local[2] | Not measured | Not measured | Not measured | Not measured | Not measured | Not measured | Not measured |
-| local[4] | Not measured | Not measured | Not measured | Not measured | Not measured | Not measured | Not measured |
+| local[2] | 318,527 | 439.73 | 724.36 | 42796 | 70155 | 0.578 | Pass |
+| local[4] | 318,527 | 336.70 | 946.02 | 52296 | 121237 | 0.754 | Pass |
 
-Only one successful run is available for this 16-file trigger configuration. The previous local[2]/local[4] runs used a different trigger size and are not compared here. Three-run means and spread, and same-protocol local[2]/local[4] runs, remain not measured; no core-scaling conclusion is drawn.
+Each core setting has one successful run under the same 16-file trigger protocol; no repeat-run mean or spread is available. In these runs local[1] was fastest, followed by local[4] and local[2]. This is an observation from one laptop run per setting, not a general scaling claim. Scheduling and larger per-trigger work are possible explanations to investigate, not measured causes.
 
 ## Measured findings and figures
 
@@ -77,7 +87,7 @@ Logistic Regression had the highest measured weighted F1 (0.7692) on this holdou
 The most frequent content tokens in predicted negative Logistic Regression predictions were work (9,927), go (9,450), get (9,104), like (8,173), day (8,149).
 The most frequent content tokens in predicted positive Logistic Regression predictions were good (13,393), love (10,326), day (9,489), lol (7,609), like (7,515).
 The daily trend contains 41 one-day UTC windows. Peak predicted-negative count: 9,442 on 2009-06-07 00:00:00; peak predicted-positive count: 12,735 on 2009-06-07 00:00:00.
-The fastest measured replay used local[1] at 1254.30 records/second.
+In this single measured set, local[1] had the highest throughput. Repeat runs are needed before attributing the difference to core count.
 
 ![Weighted F1 comparison](../outputs/figures/holdout_weighted_f1.png)
 

@@ -53,6 +53,16 @@ def main() -> None:
         "",
         "This implementation narrows the system to local Spark Structured Streaming and MLlib, evaluates three methods on the same fixed holdout, and measures local-core replay performance. It does not reproduce the paper’s multi-component deployment, bias correction, or mapping work. The comparison is architectural and methodological; absolute performance numbers are not comparable.",
         "",
+        "| Dimension | Ismail et al. (2025) | This project |",
+        "|---|---|---|",
+        "| Pipeline components | Kafka, Spark, Cassandra, HBase, Hive, HDFS | Spark Structured Streaming and MLlib on one Docker-hosted laptop |",
+        "| Data | Three use cases: COVID English Twitter API, Country English public data, COVID Spanish public data; detailed sizes not verified | Sentiment140, 1.6M source rows; cleaned deterministic train/holdout |",
+        "| Sentiment method | Twitter-XLM-RoBERTa-base, three classes | Logistic Regression, Naive Bayes, and VADER; binary labels |",
+        "| Evaluation | Classification and bias detection/correction use cases; performance varies dataset size, trigger interval, and storage technology | Shared holdout accuracy/F1; watermarked daily windows; one run per local core setting |",
+        "| Scale | Multi-component big-data architecture; exact numeric benchmark results unavailable in the accessible paper text | Local[1], local[2], local[4], 64 historical files; simulated replay, not live ingestion |",
+        "",
+        "The publisher record confirms the bibliographic volume (261) and article number (125523). The article's accessible method/results text did not expose verifiable numeric tables or precise dataset-size counts; those values are intentionally left unspecified.",
+        "",
         "## Dataset and preparation",
         "",
         "Sentiment140 is a headerless, latin-1 CSV with fields target, id, date, flag, user, and text. Targets 0 and 4 were mapped to negative 0 and positive 1. Rows without target, ID, text, valid event time, or non-empty cleaned text were excluded. Duplicate tweet IDs were removed before splitting. PDT/PST wall-clock times were normalized to UTC using offsets of -07:00 and -08:00. The username and ID fields were not persisted; VADER text removes handles and URLs, while model text also removes common escaped HTML entities before lowercasing and stripping to alphabetic tokens.",
@@ -113,7 +123,7 @@ def main() -> None:
         lines.append(
             f"| local[{cores}] | {result['records_scored']:,} | {result['stream_elapsed_seconds']:.2f} | {result['throughput_records_per_second']:.2f} | {fmt(result.get('batch_duration_median_ms'), 0)} | {fmt(result.get('batch_duration_p95_ms'), 0)} | {fmt(speedup, 3)} | {'Pass' if result['window_reconciliation_passed'] else 'Fail'} |"
         )
-    lines += ["", "Only one successful run is available for this 16-file trigger configuration. The previous local[2]/local[4] runs used a different trigger size and are not compared here. Three-run means and spread, and same-protocol local[2]/local[4] runs, remain not measured; no core-scaling conclusion is drawn.", ""]
+    lines += ["", "Each core setting has one successful run under the same 16-file trigger protocol; no repeat-run mean or spread is available. In these runs local[1] was fastest, followed by local[4] and local[2]. This is an observation from one laptop run per setting, not a general scaling claim. Scheduling and larger per-trigger work are possible explanations to investigate, not measured causes.", ""]
     if top_terms:
         lines += ["## Measured findings and figures", ""]
         if comparison:
@@ -133,7 +143,7 @@ def main() -> None:
         if completed:
             fastest = min(completed, key=lambda r: r["stream_elapsed_seconds"])
             if fastest["cores"] == 1 and len(completed) > 1:
-                lines.append("The local[1] run was fastest. Additional local cores did not improve throughput for this file replay on this machine.")
+                lines.append("In this single measured set, local[1] had the highest throughput. Repeat runs are needed before attributing the difference to core count.")
             else:
                 lines.append(f"The fastest measured replay used local[{fastest['cores']}] at {fastest['throughput_records_per_second']:.2f} records/second.")
         lines += ["", "![Weighted F1 comparison](../outputs/figures/holdout_weighted_f1.png)", "", "![Top words by predicted class](../outputs/figures/top_terms_by_prediction.png)", ""]
