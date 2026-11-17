@@ -10,3 +10,5 @@ spark-warehouse/
 metastore_db/
 __pycache__/
 *.pyc
+outputs/streaming/local_*/window_updates/
+outputs/streaming/local_*/window_checkpoint/
