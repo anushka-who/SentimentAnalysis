@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ALLOWED_TOP = {"ui"}
 ALLOWED_SUBTREES = {("outputs", "metrics"), ("outputs", "figures")}
 ALLOWED_FILES = {("report", "submission_report.md")}
+ALLOWED_STREAM_RUNS = {"local_1", "local_2", "local_4"}
 
 
 class DashboardHandler(SimpleHTTPRequestHandler):
@@ -32,6 +33,12 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             parts[0] in ALLOWED_TOP
             or tuple(parts[:2]) in ALLOWED_SUBTREES
             or tuple(parts) in ALLOWED_FILES
+            or (
+                len(parts) == 4
+                and parts[:2] == ("outputs", "streaming")
+                and parts[2] in ALLOWED_STREAM_RUNS
+                and parts[3] == "stream_metrics.json"
+            )
         )
         if not is_allowed:
             return str(ROOT / "__not_found__")
@@ -47,7 +54,7 @@ def main() -> None:
     args = parser.parse_args()
     server = ThreadingHTTPServer(("127.0.0.1", args.port), DashboardHandler)
     print(f"Dashboard: http://127.0.0.1:{args.port}/ui/")
-    print("Only ui/, outputs/metrics/, outputs/figures/, and the submission report are served.")
+    print("Only ui/, metrics, figures, three stream_metrics.json files, and the submission report are served.")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

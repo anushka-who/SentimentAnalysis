@@ -20,7 +20,7 @@
       <a href="#streaming">Streaming</a>
       <a href="#method">Method and limits</a>
     </nav>
-    <div class="topbar-meta"><span class="status-dot"></span><span id="data-status" aria-live="polite">Loading measured results</span></div>
+    <div class="topbar-meta"><span class="status-dot" id="status-indicator" data-state="loading" aria-hidden="true"></span><span id="data-status" aria-live="polite">Loading measured results</span></div>
   </header>
 
   <main>
@@ -84,7 +84,7 @@
         <article class="panel model-panel">
           <div class="table-wrap"><table><thead><tr><th>Method</th><th>Accuracy</th><th>Weighted F1</th><th>Fit time</th></tr></thead><tbody id="model-rows"><tr><td colspan="4">Loading results…</td></tr></tbody></table></div>
           <div class="metric-bars" id="metric-bars"></div>
-          <p class="panel-footnote">VADER is a lexicon baseline and has no fit step; its scoring duration is included in the machine-readable results.</p>
+          <p class="panel-footnote">VADER is a lexicon baseline and has no fit step. Holdout scoring time: <strong id="vader-timing">Loading…</strong></p>
         </article>
         <figure class="figure-card figure-f1"><img src="/outputs/figures/holdout_weighted_f1.png" alt="Bar chart comparing weighted F1 for Logistic Regression, Naive Bayes, and VADER"><figcaption>Weighted F1 on the shared holdout</figcaption></figure>
       </div>
@@ -140,7 +140,7 @@
 
     <section class="final-strip">
       <div><p class="eyebrow">Evidence files</p><h2>Every headline number has a saved source.</h2><p>Inspect the machine-readable audit, model comparison, and individual streaming progress records.</p></div>
-      <div class="evidence-links"><a href="/outputs/metrics/dataset_audit.json">Dataset audit <span>JSON</span></a><a href="/outputs/metrics/model_comparison.json">Model comparison <span>JSON</span></a><a href="/outputs/metrics/top_terms.json">Top terms <span>JSON</span></a><a href="/report/submission_report.md">Submission write-up <span>MD</span></a></div>
+      <div class="evidence-links"><a href="/outputs/metrics/dataset_audit.json">Dataset audit <span>JSON</span></a><a href="/outputs/metrics/model_comparison.json">Model comparison <span>JSON</span></a><a href="/outputs/metrics/top_terms.json">Top terms <span>JSON</span></a><a href="/outputs/metrics/daily_trend_summary.json">Daily trend summary <span>JSON</span></a><a href="/outputs/streaming/local_1/stream_metrics.json">local[1] replay evidence <span>JSON</span></a><a href="/outputs/streaming/local_2/stream_metrics.json">local[2] replay evidence <span>JSON</span></a><a href="/outputs/streaming/local_4/stream_metrics.json">local[4] replay evidence <span>JSON</span></a><a href="/report/submission_report.md">Submission write-up <span>MD</span></a></div>
     </section>
   </main>
 

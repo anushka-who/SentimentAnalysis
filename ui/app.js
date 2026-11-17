@@ -46,6 +46,8 @@ function fillModels(data) {
     <tr><td>${item.method}</td><td>${fixed(item.accuracy, 4)}</td><td><strong>${fixed(item.weighted_f1, 4)}</strong></td><td>${item.fit_seconds == null ? 'No fit step' : `${fixed(item.fit_seconds, 2)} s`}</td></tr>`).join('');
   el('metric-bars').innerHTML = data.metrics.map((item) => `
     <div class="bar-row"><span class="bar-name">${names[item.method] || item.method}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.max(0, Math.min(100, item.weighted_f1 * 100))}%"></div></div><strong class="bar-value">${fixed(item.weighted_f1, 4)}</strong></div>`).join('');
+  const vader = data.metrics.find((item) => item.method === 'VADER');
+  el('vader-timing').textContent = vader?.scoring_seconds == null ? 'Not measured' : `${fixed(vader.scoring_seconds, 2)} seconds`;
 }
 
 function fillStreams(runs) {
@@ -115,9 +117,11 @@ async function main() {
     fillTerms(terms);
     fillDetails(audit);
     el('data-status').textContent = 'Measured run data loaded';
+    el('status-indicator').dataset.state = 'ready';
   } catch (error) {
     console.error(error);
     el('data-status').textContent = 'Could not load run data';
+    el('status-indicator').dataset.state = 'error';
     document.querySelector('main').insertAdjacentHTML('afterbegin', `<div class="load-error" role="alert"><strong>Run data could not be loaded.</strong> Start the local dashboard server from the project root and reload this page.</div>`);
   }
 }

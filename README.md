@@ -66,4 +66,4 @@ After the pipeline has produced its outputs, start the allow-listed local server
 .\.venv\Scripts\python.exe src\serve_dashboard.py
 ```
 
-Open `http://127.0.0.1:8765/`. The server only exposes `ui/`, `outputs/metrics/`, `outputs/figures/`, and the submission report; it does not serve the raw CSV, processed tweet files, or prediction data.
+Open `http://127.0.0.1:8765/`. The server only exposes `ui/`, `outputs/metrics/`, `outputs/figures/`, the three `stream_metrics.json` evidence files, and the submission report; it does not serve the raw CSV, processed tweet files, or prediction data.
