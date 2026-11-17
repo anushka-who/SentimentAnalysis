@@ -48,8 +48,12 @@ def main() -> None:
     raw_count = raw.count()
     clean = clean_columns(raw, deduplicate=True).cache()
     retained_count = clean.count()
-    train = clean.withColumn("_split", F.rand(SEED)).filter(F.col("_split") < 0.8).drop("_split")
-    holdout = clean.withColumn("_split", F.rand(SEED)).filter(F.col("_split") >= 0.8).drop("_split")
+    # Stable text hash keeps identical cleaned tweets together across the split.
+    split_fraction = F.pmod(F.xxhash64("clean_text", F.lit(SEED)), F.lit(1_000_000)) / F.lit(1_000_000.0)
+    assigned = clean.withColumn("_split", split_fraction).cache()
+    assigned.count()
+    train = assigned.filter(F.col("_split") < 0.8).drop("_split")
+    holdout = assigned.filter(F.col("_split") >= 0.8).drop("_split")
 
     train_path = PROCESSED / "train"
     holdout_path = PROCESSED / "holdout"
@@ -66,12 +70,15 @@ def main() -> None:
 
     train_count, holdout_count = train.count(), holdout.count()
     ts_bad = raw_count - clean.count()
+    duplicate_text_count = (clean.groupBy("clean_text").count().filter(F.col("count") > 1)
+                            .agg(F.sum(F.col("count") - 1).alias("n")).first()[0] or 0)
     summary = {
         "source_file": RAW.name,
         "source_bytes": RAW.stat().st_size,
         "raw_rows": raw_count,
         "retained_rows": retained_count,
         "rows_removed_or_invalid": ts_bad,
+        "duplicate_clean_text_excess_rows": int(duplicate_text_count),
         "completeness_ratio": retained_count / raw_count if raw_count else None,
         "train_rows": train_count,
         "holdout_rows": holdout_count,
@@ -88,6 +95,7 @@ def main() -> None:
     write_json(METRICS / "dataset_audit.json", summary)
     print(summary)
     clean.unpersist()
+    assigned.unpersist()
     spark.stop()
 
 

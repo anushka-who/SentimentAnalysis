@@ -36,16 +36,18 @@ def main() -> None:
         if path.exists():
             runs.append(json.loads(path.read_text(encoding="utf-8")))
     if runs:
-        baseline = next((r["stream_elapsed_seconds"] for r in runs if r["cores"] == 1), None)
+        benchmark_files_per_trigger = next((r.get("max_files_per_trigger") for r in runs if r["cores"] == 1), None)
+        comparable_runs = [r for r in runs if r.get("max_files_per_trigger") == benchmark_files_per_trigger]
+        baseline = next((r["stream_elapsed_seconds"] for r in comparable_runs if r["cores"] == 1), None)
         fig, ax = plt.subplots(figsize=(7, 4.5))
-        ax.plot([r["cores"] for r in runs], [r["throughput_records_per_second"] for r in runs], marker="o", color="#7c3aed")
-        ax.set_xticks([r["cores"] for r in runs]); ax.set_xlabel("Spark local cores"); ax.set_ylabel("Records per second")
-        ax.set_title("Measured simulated replay throughput"); ax.grid(alpha=.25); fig.tight_layout()
+        ax.plot([r["cores"] for r in comparable_runs], [r["throughput_records_per_second"] for r in comparable_runs], marker="o", color="#7c3aed")
+        ax.set_xticks([r["cores"] for r in comparable_runs]); ax.set_xlabel("Spark local cores"); ax.set_ylabel("Records per second")
+        ax.set_title(f"Measured replay throughput ({benchmark_files_per_trigger} files per trigger)"); ax.grid(alpha=.25); fig.tight_layout()
         fig.savefig(FIGURES / "stream_throughput.png", dpi=180); plt.close(fig)
         if baseline:
             fig, ax = plt.subplots(figsize=(7, 4.5))
-            ax.plot([r["cores"] for r in runs], [baseline / r["stream_elapsed_seconds"] for r in runs], marker="o", color="#0891b2")
-            ax.axhline(1.0, color="#666", linewidth=1); ax.set_xticks([r["cores"] for r in runs])
+            ax.plot([r["cores"] for r in comparable_runs], [baseline / r["stream_elapsed_seconds"] for r in comparable_runs], marker="o", color="#0891b2")
+            ax.axhline(1.0, color="#666", linewidth=1); ax.set_xticks([r["cores"] for r in comparable_runs])
             ax.set_xlabel("Spark local cores"); ax.set_ylabel("Speedup (T1 / Tn)")
             ax.set_title("Measured local-mode speedup"); ax.grid(alpha=.25); fig.tight_layout()
             fig.savefig(FIGURES / "stream_speedup.png", dpi=180); plt.close(fig)
@@ -55,16 +57,28 @@ def main() -> None:
         if win_path.exists():
             rows = spark.read.parquet(str(win_path)).orderBy("day", "prediction").collect()
             by_label = {0.0: [], 1.0: []}
+            by_actual = {0.0: [], 1.0: []}
             days = sorted({r["day"] for r in rows})
             for label in (0.0, 1.0):
-                counts = {r["day"]: r["count"] for r in rows if float(r["prediction"]) == label}
+                counts = {}
+                for r in rows:
+                    if float(r["prediction"]) == label:
+                        counts[r["day"]] = counts.get(r["day"], 0) + r["count"]
                 by_label[label] = [counts.get(day, 0) for day in days]
+                actual_counts = {}
+                for r in rows:
+                    if float(r["label"]) == label:
+                        actual_counts[r["day"]] = actual_counts.get(r["day"], 0) + r["count"]
+                by_actual[label] = [actual_counts.get(day, 0) for day in days]
             peaks = {}
             for label in (0.0, 1.0):
-                class_rows = [r for r in rows if float(r["prediction"]) == label]
-                peak = max(class_rows, key=lambda r: r["count"]) if class_rows else None
+                class_counts = {}
+                for r in rows:
+                    if float(r["prediction"]) == label:
+                        class_counts[r["day"]] = class_counts.get(r["day"], 0) + r["count"]
+                peak = max(class_counts.items(), key=lambda kv: kv[1]) if class_counts else None
                 peaks["predicted_positive" if label == 1.0 else "predicted_negative"] = (
-                    {"day_utc": str(peak["day"]), "count": int(peak["count"])} if peak else None
+                    {"day_utc": str(peak[0]), "count": int(peak[1])} if peak else None
                 )
             write_json(METRICS / "daily_trend_summary.json", {
                 "one_day_utc_windows": len(days),
@@ -74,8 +88,10 @@ def main() -> None:
             fig, ax = plt.subplots(figsize=(10, 4.5))
             ax.plot(days, by_label[0.0], label="Predicted negative", color="#b91c1c")
             ax.plot(days, by_label[1.0], label="Predicted positive", color="#15803d")
-            ax.set_xlabel("Event-time day (UTC)"); ax.set_ylabel("Predicted tweets")
-            ax.set_title("Daily sentiment counts from simulated file replay"); ax.legend(); ax.grid(alpha=.2)
+            ax.plot(days, by_actual[0.0], label="Actual negative", color="#b91c1c", linestyle="--", alpha=.65)
+            ax.plot(days, by_actual[1.0], label="Actual positive", color="#15803d", linestyle="--", alpha=.65)
+            ax.set_xlabel("Event-time day (UTC)"); ax.set_ylabel("Tweet count")
+            ax.set_title("Actual and predicted daily sentiment from simulated replay"); ax.legend(ncol=2); ax.grid(alpha=.2)
             fig.autofmt_xdate(); fig.tight_layout(); fig.savefig(FIGURES / "daily_sentiment_trend.png", dpi=180); plt.close(fig)
         spark.stop()
     print(f"Charts saved to {FIGURES}")

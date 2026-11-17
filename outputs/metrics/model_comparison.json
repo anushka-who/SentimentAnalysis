@@ -1,34 +1,66 @@
 {
-  "holdout_rows": 318766,
-  "train_rows": 1275793,
+  "holdout_rows": 318527,
+  "train_rows": 1276032,
   "metrics": [
     {
       "method": "Logistic Regression",
-      "holdout_rows": 318766,
-      "accuracy": 0.764140466674614,
-      "weighted_f1": 0.7640740914879873,
-      "fit_seconds": 88.08209681400012,
+      "holdout_rows": 318527,
+      "accuracy": 0.7692377726221011,
+      "weighted_f1": 0.7691982953572066,
+      "class_metrics": {
+        "0": {
+          "precision": 0.7797994657581975,
+          "recall": 0.7542593956338854
+        },
+        "1": {
+          "precision": 0.7592285726515063,
+          "recall": 0.7843998155319566
+        }
+      },
+      "confusion_matrix": {
+        "actual_0_predicted_0": 120858,
+        "actual_0_predicted_1": 39376,
+        "actual_1_predicted_0": 34128,
+        "actual_1_predicted_1": 124165
+      },
+      "fit_seconds": 86.648050968,
       "hashing_features": 262144,
       "max_iterations": 20,
       "smoothing": null
     },
     {
       "method": "Naive Bayes",
-      "holdout_rows": 318766,
-      "accuracy": 0.7459421644717442,
-      "weighted_f1": 0.7459246781176289,
-      "fit_seconds": 39.78957613400007,
+      "holdout_rows": 318527,
+      "accuracy": 0.749525157992886,
+      "weighted_f1": 0.749463161124625,
+      "class_metrics": {
+        "0": {
+          "precision": 0.7447297815254887,
+          "recall": 0.7639389892282537
+        },
+        "1": {
+          "precision": 0.7546380384016607,
+          "recall": 0.7349345833359656
+        }
+      },
+      "confusion_matrix": {
+        "actual_0_predicted_0": 122409,
+        "actual_0_predicted_1": 37825,
+        "actual_1_predicted_0": 41958,
+        "actual_1_predicted_1": 116335
+      },
+      "fit_seconds": 68.16028599399999,
       "hashing_features": 262144,
       "max_iterations": null,
       "smoothing": 1.0
     },
     {
       "method": "VADER",
-      "holdout_rows": 318766,
-      "accuracy": 0.6550384921854903,
-      "weighted_f1": 0.6547459885633427,
+      "holdout_rows": 318527,
+      "accuracy": 0.6546729162676947,
+      "weighted_f1": 0.6542839871406472,
       "fit_seconds": null,
-      "scoring_seconds": 40.89190164299998,
+      "scoring_seconds": 54.25004633100002,
       "neutral_rule": "compound >= 0.05 => positive; otherwise negative"
     }
   ],

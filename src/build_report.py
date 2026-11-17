@@ -19,7 +19,10 @@ def main() -> None:
     comparison = read_json(METRICS / "model_comparison.json")
     top_terms = read_json(METRICS / "top_terms.json")
     trend = read_json(METRICS / "daily_trend_summary.json")
-    streams = {n: read_json(STREAMING / f"local_{n}" / "stream_metrics.json") for n in (1, 2, 4)}
+    raw_streams = {n: read_json(STREAMING / f"local_{n}" / "stream_metrics.json") for n in (1, 2, 4)}
+    benchmark_trigger = raw_streams[1].get("max_files_per_trigger") if raw_streams[1] else None
+    streams = {n: (run if run and run.get("max_files_per_trigger") == benchmark_trigger else None)
+               for n, run in raw_streams.items()}
     lines = [
         "# Real-Time Social Media Sentiment Analytics on Tweet Streams",
         "",
@@ -46,7 +49,7 @@ def main() -> None:
         "",
         "## Research reference and relation to this project",
         "",
-        "Ismail, A., Sazali, F. H., Agos Jawaddi, S. N., & Mutalib, S. (2025). *Stream ETL framework for twitter-based sentiment analysis: Leveraging big data technologies*. Expert Systems with Applications, 261, 125523. DOI: [10.1016/j.eswa.2024.125523](https://doi.org/10.1016/j.eswa.2024.125523). The publisher abstract describes a framework combining Kafka, Spark, Cassandra, HBase, Hive, and HDFS for stream ETL, sentiment analysis, bias detection/correction, and geospatial visualization. It reports use cases and technology comparisons but the detailed datasets and numeric tables were not available in the abstract reviewed for this submission. The DOI contains 2024; the journal issue is dated 2025.",
+            "Ismail, A., Sazali, F. H., Agos Jawaddi, S. N., & Mutalib, S. (2025). *Stream ETL framework for twitter-based sentiment analysis: Leveraging big data technologies*. Expert Systems with Applications, 261, 125523. DOI: [10.1016/j.eswa.2024.125523](https://doi.org/10.1016/j.eswa.2024.125523). The publisher record confirms volume 261, article 125523, and 2025 publication. Its accessible abstract/section text describes a Kafka-Spark-Cassandra/HBase-Hive-HDFS architecture, a Twitter-XLM-RoBERTa-base three-class classifier, and three use cases (COVID English API data, Country English public data, and COVID Spanish public data). The paper evaluates classification and bias detection/correction, and varies dataset size, trigger interval, and storage technology. Numeric tables and detailed dataset sizes could not be verified from the accessible full text, so no values are reproduced here.",
         "",
         "This implementation narrows the system to local Spark Structured Streaming and MLlib, evaluates three methods on the same fixed holdout, and measures local-core replay performance. It does not reproduce the paper’s multi-component deployment, bias correction, or mapping work. The comparison is architectural and methodological; absolute performance numbers are not comparable.",
         "",
@@ -75,13 +78,17 @@ def main() -> None:
     lines += ["## Models and evaluation", ""]
     if comparison:
         lines += [
-            "All methods scored the same holdout rows. Logistic Regression and multinomial Naive Bayes used word tokenization, English stop-word removal, 262,144-feature HashingTF, and IDF fitted on training data only. Logistic Regression used 20 iterations and regularization 0.01; Naive Bayes used multinomial mode and smoothing 1.0. VADER compound scores at or above 0.05 were positive; neutral and negative scores were mapped to negative.",
+            "All methods scored the same holdout rows. Logistic Regression and multinomial Naive Bayes used word tokenization, English stop-word removal except no/not/nor/never, 262,144-feature HashingTF, and IDF fitted on training data only. Logistic Regression used 20 iterations and regularization 0.01; Naive Bayes used multinomial mode and smoothing 1.0. VADER compound scores at or above 0.05 were positive; neutral scores were mapped to negative by design, which can disadvantage the binary VADER comparison.",
             "",
             "| Method | Holdout rows | Accuracy | Weighted F1 | Fit time (s) |",
             "|---|---:|---:|---:|---:|",
         ]
         for metric in comparison["metrics"]:
             lines.append(f"| {metric['method']} | {metric['holdout_rows']:,} | {metric['accuracy']:.4f} | {metric['weighted_f1']:.4f} | {fmt(metric.get('fit_seconds'), 2)} |")
+        lines += ["", "Per-class precision and recall (class 0 = negative, class 1 = positive):", "", "| Method | Class | Precision | Recall |", "|---|---:|---:|---:|"]
+        for metric in comparison["metrics"]:
+            for label, values in metric.get("class_metrics", {}).items():
+                lines.append(f"| {metric['method']} | {label} | {values['precision']:.4f} | {values['recall']:.4f} |")
         vader = next((m for m in comparison["metrics"] if m["method"] == "VADER"), None)
         vader_time = fmt(vader.get("scoring_seconds"), 2) if vader else "Not measured"
         lines += ["", f"Metrics are computed over the persisted holdout with no resampling between methods. VADER has no model fitting step; its measured scoring time was {vader_time} seconds.", ""]
@@ -89,9 +96,9 @@ def main() -> None:
         lines += ["Evaluation did not complete. Accuracy and weighted F1 are not measured.", ""]
     lines += ["## Simulated streaming and performance", ""]
     lines += [
-        "The trained Logistic Regression pipeline scored 64 historical JSON files through Spark Structured Streaming with `availableNow` and four files per trigger. This is a finite **simulated file replay**, not a live or paced feed. Stream time excludes model training and starts after the streaming query is started. Throughput is scored records divided by measured replay wait time. Batch durations are Spark trigger-execution times.",
+        f"The trained Logistic Regression pipeline scored 64 historical JSON files through Spark Structured Streaming with `availableNow` and {benchmark_trigger or 'Not measured'} files per trigger. A watermarked daily window aggregation runs in the streaming query and writes update records to a Parquet sink. The watermark covers the historical time span; final window totals are checked against valid event-time prediction rows. This is a finite **simulated file replay**, not a live or paced feed. Trigger durations are processing times, not live-feed latency.",
         "",
-        "The host has a 13th Gen Intel Core i7-1355U (12 logical processors) and 15.69 GiB physical RAM. Docker Desktop reported about 7.60 GiB available to its Linux runtime. Spark 3.5.8 ran in the official Apache image with Java 17.0.17 and Python 3.10.12.",
+        "The host has a 13th Gen Intel Core i7-1355U (12 logical processors) and 15.69 GiB physical RAM. Docker Desktop reported 12 CPUs and about 7.60 GiB available to its Linux runtime. Spark 3.5.8 ran in the official Apache image with Java 17.0.17 and Python 3.10.12.",
         "",
         "| Spark mode | Records scored | Replay time (s) | Throughput (records/s) | Median trigger (ms) | P95 trigger (ms) | Speedup | Window reconciliation |",
         "|---|---:|---:|---:|---:|---:|---:|---|",
@@ -106,7 +113,7 @@ def main() -> None:
         lines.append(
             f"| local[{cores}] | {result['records_scored']:,} | {result['stream_elapsed_seconds']:.2f} | {result['throughput_records_per_second']:.2f} | {fmt(result.get('batch_duration_median_ms'), 0)} | {fmt(result.get('batch_duration_p95_ms'), 0)} | {fmt(speedup, 3)} | {'Pass' if result['window_reconciliation_passed'] else 'Fail'} |"
         )
-    lines += ["", "Local-mode core scaling measures one laptop and does not establish cluster scalability. Only completed configurations are interpreted.", ""]
+    lines += ["", "Only one successful run is available for this 16-file trigger configuration. The previous local[2]/local[4] runs used a different trigger size and are not compared here. Three-run means and spread, and same-protocol local[2]/local[4] runs, remain not measured; no core-scaling conclusion is drawn.", ""]
     if top_terms:
         lines += ["## Measured findings and figures", ""]
         if comparison:

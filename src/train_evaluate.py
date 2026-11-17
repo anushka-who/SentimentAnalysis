@@ -32,7 +32,7 @@ def main() -> None:
     ):
         stages = [
             RegexTokenizer(inputCol="clean_text", outputCol="tokens", pattern="\\s+", minTokenLength=2),
-            StopWordsRemover(inputCol="tokens", outputCol="words"),
+            StopWordsRemover(inputCol="tokens", outputCol="words", stopWords=[w for w in StopWordsRemover.loadDefaultStopWords("english") if w not in {"no", "not", "nor", "never"}]),
             HashingTF(inputCol="words", outputCol="tf", numFeatures=1 << 18),
             IDF(inputCol="tf", outputCol="features"),
             classifier,
@@ -42,12 +42,23 @@ def main() -> None:
         model = pipe.fit(train)
         fit_seconds = time.perf_counter() - started
         scored = model.transform(holdout)
-        pred = scored.select("label", "prediction", "event_time")
+        pred = scored.select("label", "prediction", "event_time", "clean_text").withColumn("row_key", F.xxhash64("label", "event_time", "clean_text"))
+        confusion = pred.groupBy("label", "prediction").count().collect()
+        by_pair = {(int(r.label), int(r.prediction)): int(r["count"]) for r in confusion}
+        class_metrics = {}
+        for label in (0, 1):
+            tp = by_pair.get((label, label), 0)
+            fp = sum(by_pair.get((actual, label), 0) for actual in (0, 1) if actual != label)
+            fn = sum(by_pair.get((label, predicted), 0) for predicted in (0, 1) if predicted != label)
+            class_metrics[str(label)] = {"precision": tp / (tp + fp) if tp + fp else 0.0,
+                                         "recall": tp / (tp + fn) if tp + fn else 0.0}
         row = {
             "method": name,
             "holdout_rows": holdout_count,
             "accuracy": evaluator_acc.evaluate(pred),
             "weighted_f1": evaluator_f1.evaluate(pred),
+            "class_metrics": class_metrics,
+            "confusion_matrix": {f"actual_{a}_predicted_{p}": by_pair.get((a, p), 0) for a in (0, 1) for p in (0, 1)},
             "fit_seconds": fit_seconds,
             "hashing_features": 1 << 18,
             "max_iterations": 20 if name == "Logistic Regression" else None,
@@ -58,7 +69,7 @@ def main() -> None:
         pred.write.mode("overwrite").parquet(str(PREDICTIONS / prediction_dir))
         if name == "Logistic Regression":
             model.write().overwrite().save(str(PREDICTIONS / "logistic_regression_model"))
-            lr_scored = scored.select("prediction", "clean_text")
+            lr_scored = pred.select("prediction", "clean_text")
     # VADER uses the same persisted holdout. A fixed compound >= 0.05 rule is
     # positive; neutral and negative scores map to negative for this binary task.
     from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer

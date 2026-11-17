@@ -1,14 +1,14 @@
 {
   "one_day_utc_windows": 41,
-  "window_counts_total": 318766,
+  "window_counts_total": 318527,
   "peak_daily_counts": {
     "predicted_negative": {
       "day_utc": "2009-06-07 00:00:00",
-      "count": 9289
+      "count": 9442
     },
     "predicted_positive": {
       "day_utc": "2009-06-07 00:00:00",
-      "count": 12938
+      "count": 12735
     }
   }
 }

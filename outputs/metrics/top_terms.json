@@ -4,181 +4,181 @@
     {
       "prediction": 0.0,
       "word": "work",
-      "count": 9985,
+      "count": 9927,
       "rank": 1
     },
     {
       "prediction": 0.0,
       "word": "go",
-      "count": 9557,
+      "count": 9450,
       "rank": 2
     },
     {
       "prediction": 0.0,
       "word": "get",
-      "count": 9088,
+      "count": 9104,
       "rank": 3
     },
     {
       "prediction": 0.0,
       "word": "like",
-      "count": 8095,
+      "count": 8173,
       "rank": 4
     },
     {
       "prediction": 0.0,
       "word": "day",
-      "count": 7937,
+      "count": 8149,
       "rank": 5
     },
     {
       "prediction": 0.0,
       "word": "today",
-      "count": 7822,
+      "count": 7783,
       "rank": 6
     },
     {
       "prediction": 0.0,
       "word": "back",
-      "count": 6822,
+      "count": 6849,
       "rank": 7
     },
     {
       "prediction": 0.0,
-      "word": "want",
-      "count": 6618,
+      "word": "miss",
+      "count": 6756,
       "rank": 8
     },
     {
       "prediction": 0.0,
-      "word": "got",
-      "count": 6562,
+      "word": "really",
+      "count": 6543,
       "rank": 9
     },
     {
       "prediction": 0.0,
-      "word": "going",
-      "count": 6536,
+      "word": "got",
+      "count": 6542,
       "rank": 10
     },
     {
       "prediction": 0.0,
-      "word": "miss",
-      "count": 6535,
+      "word": "want",
+      "count": 6472,
       "rank": 11
     },
     {
       "prediction": 0.0,
-      "word": "really",
-      "count": 6529,
+      "word": "going",
+      "count": 6407,
       "rank": 12
     },
     {
       "prediction": 0.0,
-      "word": "still",
-      "count": 6179,
+      "word": "im",
+      "count": 6395,
       "rank": 13
     },
     {
       "prediction": 0.0,
-      "word": "im",
-      "count": 6095,
+      "word": "still",
+      "count": 6217,
       "rank": 14
     },
     {
       "prediction": 0.0,
       "word": "sad",
-      "count": 5692,
+      "count": 5735,
       "rank": 15
     },
     {
       "prediction": 1.0,
       "word": "good",
-      "count": 13554,
+      "count": 13393,
       "rank": 1
     },
     {
       "prediction": 1.0,
       "word": "love",
-      "count": 10428,
+      "count": 10326,
       "rank": 2
     },
     {
       "prediction": 1.0,
       "word": "day",
-      "count": 10048,
+      "count": 9489,
       "rank": 3
     },
     {
       "prediction": 1.0,
       "word": "lol",
-      "count": 7684,
+      "count": 7609,
       "rank": 4
     },
     {
       "prediction": 1.0,
       "word": "like",
-      "count": 7566,
+      "count": 7515,
       "rank": 5
     },
     {
       "prediction": 1.0,
-      "word": "thanks",
-      "count": 7439,
+      "word": "get",
+      "count": 6996,
       "rank": 6
     },
     {
       "prediction": 1.0,
-      "word": "get",
-      "count": 7212,
+      "word": "thanks",
+      "count": 6840,
       "rank": 7
     },
     {
       "prediction": 1.0,
       "word": "going",
-      "count": 6414,
+      "count": 6443,
       "rank": 8
     },
     {
       "prediction": 1.0,
       "word": "time",
-      "count": 6412,
+      "count": 6321,
       "rank": 9
     },
     {
       "prediction": 1.0,
-      "word": "today",
-      "count": 5950,
+      "word": "new",
+      "count": 5921,
       "rank": 10
     },
     {
       "prediction": 1.0,
-      "word": "new",
-      "count": 5928,
+      "word": "today",
+      "count": 5862,
       "rank": 11
     },
     {
       "prediction": 1.0,
       "word": "got",
-      "count": 5592,
+      "count": 5697,
       "rank": 12
     },
     {
       "prediction": 1.0,
       "word": "great",
-      "count": 5581,
+      "count": 5387,
       "rank": 13
     },
     {
       "prediction": 1.0,
       "word": "see",
-      "count": 5447,
+      "count": 5358,
       "rank": 14
     },
     {
       "prediction": 1.0,
-      "word": "one",
-      "count": 5412,
+      "word": "go",
+      "count": 5344,
       "rank": 15
     }
   ]
