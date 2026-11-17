@@ -1,0 +1,658 @@
+{
+  "cores": 2,
+  "mode": "local[2]",
+  "replay_type": "simulated streaming: finite replay of historical JSON files",
+  "source_files": 64,
+  "max_files_per_trigger": 4,
+  "records_scored": 318766,
+  "valid_event_time_rows": 318766,
+  "window_count_sum": 318766,
+  "window_reconciliation_passed": true,
+  "stream_elapsed_seconds": 120.00454886200032,
+  "throughput_records_per_second": 2656.2826411402634,
+  "micro_batches": 16,
+  "batch_trigger_duration_ms": [
+    9392,
+    7918,
+    6592,
+    6309,
+    7371,
+    5969,
+    7331,
+    6670,
+    5997,
+    7202,
+    7717,
+    6592,
+    6954,
+    8164,
+    8354,
+    6766
+  ],
+  "batch_duration_median_ms": 7202,
+  "batch_duration_p95_ms": 9392,
+  "progress": [
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:30:43.163Z",
+      "batchId": 0,
+      "numInputRows": 19930,
+      "inputRowsPerSecond": 0.0,
+      "processedRowsPerSecond": 2121.7928244437344,
+      "durationMs": {
+        "addBatch": 6324,
+        "commitOffsets": 841,
+        "getBatch": 361,
+        "latestOffset": 825,
+        "queryPlanning": 149,
+        "triggerExecution": 9392,
+        "walCommit": 784
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": null,
+          "endOffset": {
+            "logOffset": 0
+          },
+          "latestOffset": null,
+          "numInputRows": 19930,
+          "inputRowsPerSecond": 0.0,
+          "processedRowsPerSecond": 2121.7928244437344
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:30:52.586Z",
+      "batchId": 1,
+      "numInputRows": 19926,
+      "inputRowsPerSecond": 2114.6131805157593,
+      "processedRowsPerSecond": 2516.5445819651427,
+      "durationMs": {
+        "addBatch": 4771,
+        "commitOffsets": 832,
+        "getBatch": 362,
+        "latestOffset": 969,
+        "queryPlanning": 62,
+        "triggerExecution": 7918,
+        "walCommit": 913
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 0
+          },
+          "endOffset": {
+            "logOffset": 1
+          },
+          "latestOffset": null,
+          "numInputRows": 19926,
+          "inputRowsPerSecond": 2114.6131805157593,
+          "processedRowsPerSecond": 2516.5445819651427
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:31:00.508Z",
+      "batchId": 2,
+      "numInputRows": 19920,
+      "inputRowsPerSecond": 2514.5165362282255,
+      "processedRowsPerSecond": 3021.844660194175,
+      "durationMs": {
+        "addBatch": 3660,
+        "commitOffsets": 911,
+        "getBatch": 331,
+        "latestOffset": 837,
+        "queryPlanning": 37,
+        "triggerExecution": 6592,
+        "walCommit": 809
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 1
+          },
+          "endOffset": {
+            "logOffset": 2
+          },
+          "latestOffset": null,
+          "numInputRows": 19920,
+          "inputRowsPerSecond": 2514.5165362282255,
+          "processedRowsPerSecond": 3021.844660194175
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:31:07.104Z",
+      "batchId": 3,
+      "numInputRows": 19916,
+      "inputRowsPerSecond": 3019.4057004244996,
+      "processedRowsPerSecond": 3156.259904912837,
+      "durationMs": {
+        "addBatch": 3239,
+        "commitOffsets": 942,
+        "getBatch": 382,
+        "latestOffset": 926,
+        "queryPlanning": 42,
+        "triggerExecution": 6309,
+        "walCommit": 771
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 2
+          },
+          "endOffset": {
+            "logOffset": 3
+          },
+          "latestOffset": null,
+          "numInputRows": 19916,
+          "inputRowsPerSecond": 3019.4057004244996,
+          "processedRowsPerSecond": 3156.259904912837
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:31:13.418Z",
+      "batchId": 4,
+      "numInputRows": 19922,
+      "inputRowsPerSecond": 3155.210643015521,
+      "processedRowsPerSecond": 2702.754036087369,
+      "durationMs": {
+        "addBatch": 3743,
+        "commitOffsets": 739,
+        "getBatch": 373,
+        "latestOffset": 1274,
+        "queryPlanning": 66,
+        "triggerExecution": 7371,
+        "walCommit": 1165
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 3
+          },
+          "endOffset": {
+            "logOffset": 4
+          },
+          "latestOffset": null,
+          "numInputRows": 19922,
+          "inputRowsPerSecond": 3155.210643015521,
+          "processedRowsPerSecond": 2702.754036087369
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:31:20.792Z",
+      "batchId": 5,
+      "numInputRows": 19920,
+      "inputRowsPerSecond": 2701.3832384052075,
+      "processedRowsPerSecond": 3336.683417085427,
+      "durationMs": {
+        "addBatch": 3231,
+        "commitOffsets": 786,
+        "getBatch": 416,
+        "latestOffset": 813,
+        "queryPlanning": 40,
+        "triggerExecution": 5969,
+        "walCommit": 680
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 4
+          },
+          "endOffset": {
+            "logOffset": 5
+          },
+          "latestOffset": null,
+          "numInputRows": 19920,
+          "inputRowsPerSecond": 2701.3832384052075,
+          "processedRowsPerSecond": 3336.683417085427
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:31:26.764Z",
+      "batchId": 6,
+      "numInputRows": 19921,
+      "inputRowsPerSecond": 3335.7334226389817,
+      "processedRowsPerSecond": 2717.364616014186,
+      "durationMs": {
+        "addBatch": 4352,
+        "commitOffsets": 849,
+        "getBatch": 307,
+        "latestOffset": 905,
+        "queryPlanning": 27,
+        "triggerExecution": 7331,
+        "walCommit": 886
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 5
+          },
+          "endOffset": {
+            "logOffset": 6
+          },
+          "latestOffset": null,
+          "numInputRows": 19921,
+          "inputRowsPerSecond": 3335.7334226389817,
+          "processedRowsPerSecond": 2717.364616014186
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:31:34.098Z",
+      "batchId": 7,
+      "numInputRows": 19924,
+      "inputRowsPerSecond": 2716.662121625307,
+      "processedRowsPerSecond": 2987.106446776612,
+      "durationMs": {
+        "addBatch": 3867,
+        "commitOffsets": 758,
+        "getBatch": 334,
+        "latestOffset": 918,
+        "queryPlanning": 32,
+        "triggerExecution": 6670,
+        "walCommit": 755
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 6
+          },
+          "endOffset": {
+            "logOffset": 7
+          },
+          "latestOffset": null,
+          "numInputRows": 19924,
+          "inputRowsPerSecond": 2716.662121625307,
+          "processedRowsPerSecond": 2987.106446776612
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:31:40.771Z",
+      "batchId": 8,
+      "numInputRows": 19924,
+      "inputRowsPerSecond": 2985.763524651581,
+      "processedRowsPerSecond": 3322.3278305819576,
+      "durationMs": {
+        "addBatch": 3380,
+        "commitOffsets": 749,
+        "getBatch": 273,
+        "latestOffset": 918,
+        "queryPlanning": 17,
+        "triggerExecution": 5997,
+        "walCommit": 654
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 7
+          },
+          "endOffset": {
+            "logOffset": 8
+          },
+          "latestOffset": null,
+          "numInputRows": 19924,
+          "inputRowsPerSecond": 2985.763524651581,
+          "processedRowsPerSecond": 3322.3278305819576
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:31:46.771Z",
+      "batchId": 9,
+      "numInputRows": 19924,
+      "inputRowsPerSecond": 3320.6666666666665,
+      "processedRowsPerSecond": 2766.4537628436547,
+      "durationMs": {
+        "addBatch": 3611,
+        "commitOffsets": 745,
+        "getBatch": 164,
+        "latestOffset": 1585,
+        "queryPlanning": 19,
+        "triggerExecution": 7202,
+        "walCommit": 1073
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 8
+          },
+          "endOffset": {
+            "logOffset": 9
+          },
+          "latestOffset": null,
+          "numInputRows": 19924,
+          "inputRowsPerSecond": 3320.6666666666665,
+          "processedRowsPerSecond": 2766.4537628436547
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:31:53.974Z",
+      "batchId": 10,
+      "numInputRows": 19920,
+      "inputRowsPerSecond": 2765.514369012911,
+      "processedRowsPerSecond": 2581.313982117403,
+      "durationMs": {
+        "addBatch": 4961,
+        "commitOffsets": 1097,
+        "getBatch": 272,
+        "latestOffset": 695,
+        "queryPlanning": 27,
+        "triggerExecution": 7717,
+        "walCommit": 659
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 9
+          },
+          "endOffset": {
+            "logOffset": 10
+          },
+          "latestOffset": null,
+          "numInputRows": 19920,
+          "inputRowsPerSecond": 2765.514369012911,
+          "processedRowsPerSecond": 2581.313982117403
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:32:01.694Z",
+      "batchId": 11,
+      "numInputRows": 19917,
+      "inputRowsPerSecond": 2579.9222797927464,
+      "processedRowsPerSecond": 3021.3895631067962,
+      "durationMs": {
+        "addBatch": 3477,
+        "commitOffsets": 930,
+        "getBatch": 397,
+        "latestOffset": 1051,
+        "queryPlanning": 40,
+        "triggerExecution": 6592,
+        "walCommit": 691
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 10
+          },
+          "endOffset": {
+            "logOffset": 11
+          },
+          "latestOffset": null,
+          "numInputRows": 19917,
+          "inputRowsPerSecond": 2579.9222797927464,
+          "processedRowsPerSecond": 3021.3895631067962
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:32:08.289Z",
+      "batchId": 12,
+      "numInputRows": 19923,
+      "inputRowsPerSecond": 3020.9249431387416,
+      "processedRowsPerSecond": 2864.969801553063,
+      "durationMs": {
+        "addBatch": 3934,
+        "commitOffsets": 798,
+        "getBatch": 384,
+        "latestOffset": 989,
+        "queryPlanning": 48,
+        "triggerExecution": 6954,
+        "walCommit": 794
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 11
+          },
+          "endOffset": {
+            "logOffset": 12
+          },
+          "latestOffset": null,
+          "numInputRows": 19923,
+          "inputRowsPerSecond": 3020.9249431387416,
+          "processedRowsPerSecond": 2864.969801553063
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:32:15.245Z",
+      "batchId": 13,
+      "numInputRows": 19924,
+      "inputRowsPerSecond": 2864.28982173663,
+      "processedRowsPerSecond": 2440.47035766781,
+      "durationMs": {
+        "addBatch": 5077,
+        "commitOffsets": 1047,
+        "getBatch": 428,
+        "latestOffset": 859,
+        "queryPlanning": 21,
+        "triggerExecution": 8164,
+        "walCommit": 725
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 12
+          },
+          "endOffset": {
+            "logOffset": 13
+          },
+          "latestOffset": null,
+          "numInputRows": 19924,
+          "inputRowsPerSecond": 2864.28982173663,
+          "processedRowsPerSecond": 2440.47035766781
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:32:23.411Z",
+      "batchId": 14,
+      "numInputRows": 19925,
+      "inputRowsPerSecond": 2439.99510164095,
+      "processedRowsPerSecond": 2385.084989226718,
+      "durationMs": {
+        "addBatch": 3962,
+        "commitOffsets": 682,
+        "getBatch": 358,
+        "latestOffset": 1626,
+        "queryPlanning": 52,
+        "triggerExecution": 8354,
+        "walCommit": 1667
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 13
+          },
+          "endOffset": {
+            "logOffset": 14
+          },
+          "latestOffset": null,
+          "numInputRows": 19925,
+          "inputRowsPerSecond": 2439.99510164095,
+          "processedRowsPerSecond": 2385.084989226718
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    },
+    {
+      "id": "94696fbe-2058-47d7-ae55-33e8ab532755",
+      "runId": "5b05454b-f28c-45be-8e93-2c1aeaca1dab",
+      "name": null,
+      "timestamp": "2026-11-17T07:32:31.768Z",
+      "batchId": 15,
+      "numInputRows": 19930,
+      "inputRowsPerSecond": 2384.827091061386,
+      "processedRowsPerSecond": 2945.6104049660066,
+      "durationMs": {
+        "addBatch": 4016,
+        "commitOffsets": 809,
+        "getBatch": 352,
+        "latestOffset": 715,
+        "queryPlanning": 25,
+        "triggerExecution": 6766,
+        "walCommit": 844
+      },
+      "stateOperators": [],
+      "sources": [
+        {
+          "description": "FileStreamSource[file:/workspace/data/processed/simulated_stream]",
+          "startOffset": {
+            "logOffset": 14
+          },
+          "endOffset": {
+            "logOffset": 15
+          },
+          "latestOffset": null,
+          "numInputRows": 19930,
+          "inputRowsPerSecond": 2384.827091061386,
+          "processedRowsPerSecond": 2945.6104049660066
+        }
+      ],
+      "sink": {
+        "description": "FileSink[/workspace/outputs/streaming/local_2/predictions]",
+        "numOutputRows": -1
+      }
+    }
+  ]
+}

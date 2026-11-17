@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102b3f">
+  <title>Sentiment140 Analytics | Project dashboard</title>
+  <link rel="stylesheet" href="/ui/styles.css">
+  <script defer src="/ui/app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#overview" aria-label="Sentiment140 Analytics home">
+      <span class="brand-mark" aria-hidden="true">S</span>
+      <span><strong>Sentiment140</strong><small>Analytics project</small></span>
+    </a>
+    <nav class="topnav" aria-label="Main navigation">
+      <a href="#overview">Overview</a>
+      <a href="#models">Model results</a>
+      <a href="#streaming">Streaming</a>
+      <a href="#method">Method and limits</a>
+    </nav>
+    <div class="topbar-meta"><span class="status-dot"></span><span id="data-status" aria-live="polite">Loading measured results</span></div>
+  </header>
+
+  <main>
+    <section class="hero" id="overview">
+      <div class="hero-copy">
+        <p class="eyebrow">Big Data Analytics · CSE557</p>
+        <h1>Social sentiment,<br><em>measured end to end.</em></h1>
+        <p class="hero-lede">A reproducible Spark pipeline for Sentiment140, comparing two MLlib classifiers with VADER, then replaying the same holdout as historical files.</p>
+        <div class="hero-tags"><span class="tag tag-light">Historical data</span><span class="tag tag-outline">Simulated streaming</span><span class="tag tag-outline">Local Spark</span></div>
+        <div class="hero-links"><a class="button button-light" href="#models">View measured results <span aria-hidden="true">→</span></a><a class="text-link" href="/report/submission_report.md">Read submission report</a></div>
+      </div>
+      <aside class="hero-note">
+        <div class="note-label">Project status</div>
+        <div class="note-title">Backend complete</div>
+        <p>All three classifiers scored the same holdout. Three sequential local-core replay runs completed with window reconciliation.</p>
+        <div class="note-rule"></div>
+        <div class="note-row"><span>Submission deadline</span><strong>19 Nov 2026</strong></div>
+        <div class="note-row"><span>Result basis</span><strong>Successful local runs</strong></div>
+      </aside>
+      <div class="hero-decoration" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    </section>
+
+    <section class="section overview-section" aria-labelledby="snapshot-title">
+      <div class="section-heading">
+        <div><p class="eyebrow eyebrow-dark">Run snapshot</p><h2 id="snapshot-title">One dataset. One holdout. Three models.</h2></div>
+        <p class="section-intro">The metrics below are loaded from the saved run evidence. No live-feed or cluster-scale values are implied.</p>
+      </div>
+      <div class="kpi-grid" id="kpi-grid">
+        <article class="kpi-card"><span class="kpi-label">Raw records</span><strong id="kpi-raw">—</strong><small>Sentiment140 CSV</small></article>
+        <article class="kpi-card"><span class="kpi-label">Retained</span><strong id="kpi-retained">—</strong><small id="kpi-retained-note">After cleaning and deduplication</small></article>
+        <article class="kpi-card"><span class="kpi-label">Shared holdout</span><strong id="kpi-holdout">—</strong><small>Scored by all three methods</small></article>
+        <article class="kpi-card kpi-accent"><span class="kpi-label">Best weighted F1</span><strong id="kpi-best-f1">—</strong><small id="kpi-best-method">Measured on the holdout</small></article>
+      </div>
+      <div class="overview-grid">
+        <article class="panel panel-data">
+          <div class="panel-heading"><div><p class="eyebrow eyebrow-dark">Data quality</p><h3>Preparation and split</h3></div><span class="panel-index">01</span></div>
+          <div class="quality-number"><strong id="quality-ratio">—</strong><span>retained</span></div>
+          <div class="quality-track"><span id="quality-fill"></span></div>
+          <div class="split-row"><div><span class="mini-label">Training</span><strong id="split-train">—</strong></div><div><span class="mini-label">Holdout</span><strong id="split-holdout">—</strong></div></div>
+          <div class="class-balance" id="class-balance"></div>
+          <p class="panel-footnote">Seeded random 80/20 split after deduplication; raw source order was not used for evaluation.</p>
+        </article>
+        <article class="panel panel-question">
+          <div class="panel-heading"><div><p class="eyebrow eyebrow-dark">Project questions</p><h3>What the pipeline measures</h3></div><span class="panel-index">02</span></div>
+          <div class="question-list">
+            <div><span class="question-number">01</span><p>How do predicted positive and negative counts change by event-time day?</p></div>
+            <div><span class="question-number">02</span><p>Which cleaned terms are most frequent in each predicted class?</p></div>
+            <div><span class="question-number">03</span><p>How do Logistic Regression, Naive Bayes, and VADER compare on one holdout?</p></div>
+            <div><span class="question-number">04</span><p>Does local Spark core count improve measured replay throughput?</p></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section section-tint" id="models" aria-labelledby="models-title">
+      <div class="section-heading">
+        <div><p class="eyebrow eyebrow-dark">01 / Classification</p><h2 id="models-title">Model comparison</h2></div>
+        <p class="section-intro">All methods were evaluated against the same 318K-record holdout. F1 is weighted across both classes.</p>
+      </div>
+      <div class="models-layout">
+        <article class="panel model-panel">
+          <div class="table-wrap"><table><thead><tr><th>Method</th><th>Accuracy</th><th>Weighted F1</th><th>Fit time</th></tr></thead><tbody id="model-rows"><tr><td colspan="4">Loading results…</td></tr></tbody></table></div>
+          <div class="metric-bars" id="metric-bars"></div>
+          <p class="panel-footnote">VADER is a lexicon baseline and has no fit step; its scoring duration is included in the machine-readable results.</p>
+        </article>
+        <figure class="figure-card figure-f1"><img src="/outputs/figures/holdout_weighted_f1.png" alt="Bar chart comparing weighted F1 for Logistic Regression, Naive Bayes, and VADER"><figcaption>Weighted F1 on the shared holdout</figcaption></figure>
+      </div>
+      <div class="method-cards">
+        <article class="method-card"><span class="method-number">A</span><h3>Logistic Regression</h3><p>TF-IDF features, 262,144 HashingTF dimensions, 20 iterations, regularization 0.01.</p></article>
+        <article class="method-card"><span class="method-number">B</span><h3>Naive Bayes</h3><p>Multinomial model on the same training split and TF-IDF feature configuration; smoothing 1.0.</p></article>
+        <article class="method-card"><span class="method-number">C</span><h3>VADER</h3><p>Compound score ≥ 0.05 maps to positive; neutral and negative scores map to negative.</p></article>
+      </div>
+    </section>
+
+    <section class="section" id="streaming" aria-labelledby="stream-title">
+      <div class="section-heading">
+        <div><p class="eyebrow eyebrow-dark">02 / Performance</p><h2 id="stream-title">A file replay, measured honestly</h2></div>
+        <p class="section-intro">The trained Logistic Regression model processed the holdout through Spark Structured Streaming with the same 64 JSON files and four files per trigger.</p>
+      </div>
+      <div class="simulation-banner"><span class="banner-mark" aria-hidden="true">i</span><div><strong>Simulated streaming</strong><p>Historical Sentiment140 records were replayed as files. This is not a live Twitter/X feed, and it does not measure live arrival latency.</p></div><span id="reconciliation-status" class="reconcile-pill">Checking totals</span></div>
+      <div class="stream-kpis" id="stream-kpis"></div>
+      <article class="panel stream-table-panel"><div class="table-wrap"><table><thead><tr><th>Spark mode</th><th>Rows scored</th><th>Replay time</th><th>Throughput</th><th>Median batch</th><th>P95 batch</th><th>Speedup</th><th>Window counts</th></tr></thead><tbody id="stream-rows"><tr><td colspan="8">Loading benchmark runs…</td></tr></tbody></table></div></article>
+      <div class="figure-grid">
+        <figure class="figure-card"><img src="/outputs/figures/stream_throughput.png" alt="Measured throughput by local Spark core count"><figcaption>Replay throughput by core setting</figcaption></figure>
+        <figure class="figure-card"><img src="/outputs/figures/stream_speedup.png" alt="Measured speedup relative to the local one-core run"><figcaption>Speedup relative to local[1]</figcaption></figure>
+      </div>
+      <div class="figure-grid figure-grid-wide">
+        <figure class="figure-card"><img src="/outputs/figures/daily_sentiment_trend.png" alt="Daily positive and negative predicted sentiment counts using UTC event time"><figcaption>One-day UTC event-time counts from the simulated replay</figcaption></figure>
+        <article class="panel trend-callout"><p class="eyebrow eyebrow-dark">Event-time summary</p><h3 id="trend-window-count">—</h3><p>daily UTC windows represented in the replay</p><div class="peak-row"><span>Peak predicted negative</span><strong id="peak-negative">—</strong></div><div class="peak-row"><span>Peak predicted positive</span><strong id="peak-positive">—</strong></div><p class="panel-footnote">Window counts summed to the number of scored records with valid event time in each completed run.</p></article>
+      </div>
+    </section>
+
+    <section class="section section-tint" aria-labelledby="terms-title">
+      <div class="section-heading">
+        <div><p class="eyebrow eyebrow-dark">03 / Text signals</p><h2 id="terms-title">Words in predicted classes</h2></div>
+        <p class="section-intro">Top content tokens from Logistic Regression predictions on the holdout. Counts are occurrences, not unique tweets or causal explanations.</p>
+      </div>
+      <figure class="figure-card figure-terms"><img src="/outputs/figures/top_terms_by_prediction.png" alt="Top content token counts in negative and positive Logistic Regression predictions"><figcaption>Top 15 content tokens by predicted class after HTML entity cleanup</figcaption></figure>
+      <div class="terms-columns" id="term-lists"></div>
+    </section>
+
+    <section class="section" id="method" aria-labelledby="method-title">
+      <div class="section-heading">
+        <div><p class="eyebrow eyebrow-dark">04 / Methods and context</p><h2 id="method-title">How this run was produced</h2></div>
+        <p class="section-intro">The project stays within a single-machine scope and reports only outputs from completed runs.</p>
+      </div>
+      <div class="method-layout">
+        <article class="panel details-panel"><p class="eyebrow eyebrow-dark">Data and runtime</p><h3>Reproducibility details</h3><dl class="detail-list" id="run-details"></dl></article>
+        <article class="panel paper-panel"><p class="eyebrow eyebrow-dark">Research context</p><h3>Stream ETL framework</h3><p>Ismail et al. describe a multi-component Twitter stream ETL framework using Kafka, Spark, Cassandra, HBase, Hive, and HDFS, with sentiment analysis, bias handling, and geospatial visualization.</p><p>This project implements a smaller Spark-only path, then compares classifiers and local replay performance. It compares design and measured trends, not absolute benchmark values from the paper.</p><a class="text-link text-link-dark" href="https://doi.org/10.1016/j.eswa.2024.125523" target="_blank" rel="noreferrer">Open publisher article <span aria-hidden="true">↗</span></a><small class="citation-note">Publisher abstract reviewed; detailed paper dataset sizes and benchmark tables were not verified.</small></article>
+      </div>
+      <div class="limitations-grid">
+        <article class="limit-card"><span class="limit-label">Data limitation</span><h3>Historical and noisy labels</h3><p>Sentiment140 is from 2009. Labels were assigned through distant supervision and do not provide human-verified sentiment for each tweet.</p></article>
+        <article class="limit-card"><span class="limit-label">System limitation</span><h3>One machine</h3><p>Local core comparisons describe this laptop and a finite file replay. They do not establish distributed cluster scaling or live-feed latency.</p></article>
+        <article class="limit-card"><span class="limit-label">Scope boundary</span><h3>No live platform feed</h3><p>No Kafka, HDFS, public API ingestion, geolocation, or identifiable user reporting was included.</p></article>
+      </div>
+    </section>
+
+    <section class="final-strip">
+      <div><p class="eyebrow">Evidence files</p><h2>Every headline number has a saved source.</h2><p>Inspect the machine-readable audit, model comparison, and individual streaming progress records.</p></div>
+      <div class="evidence-links"><a href="/outputs/metrics/dataset_audit.json">Dataset audit <span>JSON</span></a><a href="/outputs/metrics/model_comparison.json">Model comparison <span>JSON</span></a><a href="/outputs/metrics/top_terms.json">Top terms <span>JSON</span></a><a href="/report/submission_report.md">Submission write-up <span>MD</span></a></div>
+    </section>
+  </main>
+
+  <footer class="footer"><span>Sentiment140 Analytics · Ramaiah Institute of Technology · 2026</span><span>Prepared by Anish Krishna and Anushka Sharad</span></footer>
+</body>
+</html>

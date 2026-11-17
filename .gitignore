@@ -1,0 +1,12 @@
+.venv/
+.tmp/
+data/raw/*.csv
+data/processed/
+outputs/predictions/
+outputs/streaming/local_*/checkpoint/
+outputs/streaming/local_*/daily_window_counts/
+outputs/streaming/local_*/predictions/
+spark-warehouse/
+metastore_db/
+__pycache__/
+*.pyc

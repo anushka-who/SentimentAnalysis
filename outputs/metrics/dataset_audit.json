@@ -1,0 +1,25 @@
+{
+  "source_file": "training.1600000.processed.noemoticon.csv",
+  "source_bytes": 238803811,
+  "raw_rows": 1600000,
+  "retained_rows": 1594559,
+  "rows_removed_or_invalid": 5441,
+  "completeness_ratio": 0.996599375,
+  "train_rows": 1275793,
+  "holdout_rows": 318766,
+  "train_label_counts_target": {
+    "4": 637063,
+    "0": 638730
+  },
+  "holdout_label_counts_target": {
+    "4": 159197,
+    "0": 159569
+  },
+  "split_seed": 42,
+  "train_fraction_threshold": 0.8,
+  "stream_files_requested": 64,
+  "simulated_stream_directory": "data/processed/simulated_stream",
+  "timestamp_parse_rule": "PDT=-0700, PST=-0800; Spark session UTC",
+  "preparation_seconds": 153.0660990260003,
+  "usernames_or_ids_saved": false
+}

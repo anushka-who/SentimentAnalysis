@@ -1,0 +1,36 @@
+{
+  "holdout_rows": 318766,
+  "train_rows": 1275793,
+  "metrics": [
+    {
+      "method": "Logistic Regression",
+      "holdout_rows": 318766,
+      "accuracy": 0.764140466674614,
+      "weighted_f1": 0.7640740914879873,
+      "fit_seconds": 88.08209681400012,
+      "hashing_features": 262144,
+      "max_iterations": 20,
+      "smoothing": null
+    },
+    {
+      "method": "Naive Bayes",
+      "holdout_rows": 318766,
+      "accuracy": 0.7459421644717442,
+      "weighted_f1": 0.7459246781176289,
+      "fit_seconds": 39.78957613400007,
+      "hashing_features": 262144,
+      "max_iterations": null,
+      "smoothing": 1.0
+    },
+    {
+      "method": "VADER",
+      "holdout_rows": 318766,
+      "accuracy": 0.6550384921854903,
+      "weighted_f1": 0.6547459885633427,
+      "fit_seconds": null,
+      "scoring_seconds": 40.89190164299998,
+      "neutral_rule": "compound >= 0.05 => positive; otherwise negative"
+    }
+  ],
+  "shared_holdout": true
+}
